@@ -14,18 +14,19 @@ public class RemoveGreaterCommand extends Command {
         if (isNameExist(args[0]))
             return "Элемента с заданным именем нет в коллекции.";
 
-        HashMap<String, StudyGroup> groups = CollectionStorage.storage.getCollection();
+        HashMap<String, StudyGroup> groups = CollectionStorage.storage.getUserCollection(user);
 
         HashMap<String, StudyGroup> sortedGroups = groups.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue()).collect(Collectors.toMap(
+                .sorted(Map.Entry.<String, StudyGroup>comparingByValue().reversed()).collect(Collectors.toMap(
                         Map.Entry::getKey,
                         Map.Entry::getValue,
                         (oldVal, newVal) -> oldVal,
                         LinkedHashMap::new
                 ));
 
-        CollectionStorage.storage.setSubMap(args[0], sortedGroups);
+        HashMap<String, StudyGroup> subMap = CollectionStorage.storage.setSubMap(args[0], sortedGroups);
+        CollectionStorage.storage.getAllCollection().keySet().removeAll(subMap.keySet());
 
-        return "Элементы, большие чем " + args[0] + " были удалены из коллекции.";
+        return "Элементы, большие чем " + args[0] + " были удалены из коллекции " + user.login;
     }
 }

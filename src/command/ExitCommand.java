@@ -6,7 +6,7 @@ public class ExitCommand extends Command {
 
     @Override
     public String execute(){
-        CollectionStorage.storage.saveCollection();
+        CollectionStorage.saveCollection();
         return "Коллекция сохранена.";
     }
 }

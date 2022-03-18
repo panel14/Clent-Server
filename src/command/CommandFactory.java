@@ -1,9 +1,11 @@
 package command;
 
-public class CommandFactory {
+import utils.User;
 
-    public static Command createCommand(CommandType type, String[] args){
-        HistoryCommand historyCommand = new HistoryCommand();
+public class CommandFactory {
+    static HistoryCommand historyCommand = new HistoryCommand();
+
+    public static Command createCommand(CommandType type, String[] args, User user){
 
         Command command = null;
 
@@ -61,7 +63,7 @@ public class CommandFactory {
         }
         if (args != null) {
             assert command != null;
-            command.setArgs(args);
+            command.setArgs(args, user);
         }
         historyCommand.updateHistory(type.toString());
 

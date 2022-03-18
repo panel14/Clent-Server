@@ -1,33 +1,52 @@
 package state;
 
+import server.service.DataBase;
 import studyGroup.*;
-import utils.FileConverter;
+import utils.User;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public final class CollectionStorage {
-
-    private final static String path = "src/resources/collection.csv";
 
     public static CollectionStorage storage = new CollectionStorage();
     private static HashMap<String, StudyGroup> collection;
     private final LocalDateTime initDate;
 
     private CollectionStorage(){
-        collection = FileConverter.getCollection(path);
+        collection = DataBase.getCollection();
         initDate = LocalDateTime.now();
     }
 
-    public HashMap<String, StudyGroup> getCollection() {
+    public synchronized HashMap<String, StudyGroup> getAllCollection() {
+        if (collection.isEmpty())
+            collection = DataBase.getCollection();
         return collection;
     }
 
-    public void setCollection(HashMap<String, StudyGroup> all) {
+    public static synchronized void supplementAllCollection(HashMap<String, StudyGroup> all) {
         collection.putAll(all);
     }
 
-    public void setSubMap(String subBorder, HashMap<String, StudyGroup> map) {
+    public synchronized HashMap<String, StudyGroup> getUserCollection(User user){
+        HashMap<String, StudyGroup> userCol = getAllCollection();
+        return userCol.entrySet().stream()
+                .filter(x -> x.getValue().getOwner().equals(user.login)).collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (oldVal, newVal) -> oldVal,
+                        LinkedHashMap::new
+                ));
+    }
+
+    public static synchronized void saveCollection(){
+        DataBase.saveCollection(collection);
+    }
+
+    public synchronized HashMap<String, StudyGroup> setSubMap(String subBorder, HashMap<String, StudyGroup> map) {
         boolean isFounded = false;
         String[] keys = map.keySet().toArray(new String[0]);
         for (String key : keys){
@@ -36,15 +55,10 @@ public final class CollectionStorage {
             if (!isFounded)
                 map.remove(key);
         }
-
-        collection = map;
+        return map;
     }
 
-    public void saveCollection(){
-        FileConverter.saveCollection(collection, path);
-    }
-
-    public String getCollectionInfo(){
+    public synchronized String getCollectionInfo(){
         return "Тип коллекции: " + HashMap.class + "\n"
                 +"Дата инициализации: " + initDate + "\n"
                 +"Количество элементов: " + collection.size();

@@ -13,15 +13,17 @@ public class StudyGroup implements Comparable<StudyGroup> {
     private FormOfEducation formOfEducation;                 //Поле может быть null
     private Semester semesterEnum;                           //Поле не может быть null
     private Person groupAdmin;                               //Поле может быть null
+    private String owner;
 
-    public static void setCount(int count) {
-        StudyGroup.count = count;
+    public String getOwner() {
+        return owner;
     }
 
-    private static int count;
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
 
     public StudyGroup(){
-        this.id = ++count;
         this.name = "Bob";
         this.creationDate = LocalDateTime.now().withNano(0);
         this.coordinates = new Coordinates(404, 666.66f);
@@ -33,7 +35,7 @@ public class StudyGroup implements Comparable<StudyGroup> {
     }
 
     public void setId(Integer id){
-        this.id = (id > 0) ? id : ++count;
+        this.id = id;
     }
 
     public long getStudentsCount(){

@@ -22,6 +22,7 @@ public class HelpCommand extends Command implements Serializable {
                 "history - вывести последние 8 команд (без аргументов)\n" +
                 "average_of_students_count - вывести среднее значение поля studentsCount для всех элементов коллекции\n" +
                 "filter_starts_with_name name - вывести элементы, значение поля name которых начинается с заданной подстроки\n" +
-                "print_descending - вывести элементы коллекции в порядке убывания\n";
+                "print_descending - вывести элементы коллекции в порядке убывания\n\n" +
+                "Чтобы вернуться к авторизации введите \"back\"";
     }
 }

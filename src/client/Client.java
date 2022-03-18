@@ -1,9 +1,5 @@
 package client;
-
-import utils.FileConverter;
-import utils.Request;
-import utils.Response;
-import utils.Serializer;
+import utils.*;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -15,8 +11,8 @@ import java.util.Scanner;
 public class Client {
 
     final private static String LOCALHOST = "localhost";
-    final private static int PORT = 8090;
-    final public static int TIMEOUT = 10;
+    private static int port;
+    final public static int TIMEOUT = 50;
 
     private static SocketAddress address;
     private static DatagramChannel channel;
@@ -25,22 +21,37 @@ public class Client {
 
     public static void main(String[] args) {
 
-        address = new InetSocketAddress(LOCALHOST, PORT);
-        try {
+/*        if (NumberUtils.isParsable(args[0]))
+            port = Integer.parseInt(args[0]);
+        else port = 8090;*/
 
+        port = 8090;
+
+        address = new InetSocketAddress(LOCALHOST, port);
+        try {
             channel = DatagramChannel.open();
             channel.configureBlocking(false);
+
+            User user = UserIdentify.getUser();
 
             while (true){
                 System.out.println("Введите команду:");
 
                 String[] command = scanner.nextLine().split(" ");
                 if (command[0].equals("exit")){
-                    Request exitRequest = RequestManager.makeRequest(command);
+                    Request exitRequest = RequestManager.makeRequest(command, user);
                     send(exitRequest);
                     channel.close();
                     System.out.println("Завершение работы.");
                     return;
+                }
+
+                if (command[0].equals("back")){
+                    Request outRequest = RequestManager.makeRequest(new String[]{"exit"}, user);
+                    send(outRequest);
+                    receiveAnswer();
+                    user = UserIdentify.getUser();
+                    continue;
                 }
 
                 if (command[0].equals("execute_script")) {
@@ -48,7 +59,8 @@ public class Client {
                         System.out.println("Неверный ввод команды.");
                         continue;
                     }
-                    String commandsStr = FileConverter.readFile(command[1]);
+                    String path = "src/resources/" + command[1];
+                    String commandsStr = FileConverter.readFile(path);
 
                     if (commandsStr.equals("#fail#")) {
                         System.out.println("Не удалось считать файл по заданному пути.");
@@ -56,17 +68,18 @@ public class Client {
                     }
 
                     String[] commandsArr = commandsStr.split("\n");
-                    for (String com : commandsArr){
-                        Request scriptReq =RequestManager.makeRequest(com.split(" "));
+                    for (String com : commandsArr) {
+                        String trimmed = com.trim();
+                        Request scriptReq = RequestManager.makeRequest(trimmed.split(" "), user);
                         if (scriptReq != null)
                             send(scriptReq);
                         else System.out.println("Неизвестная команда");
-
                         receiveAnswer();
                     }
+                    continue;
                 }
 
-                Request order = RequestManager.makeRequest(command);
+                Request order = RequestManager.makeRequest(command, user);
                 if (order != null){
                     send(order);
                 }
@@ -74,8 +87,8 @@ public class Client {
                     System.out.println("Неизвестная команда.");
                     continue;
                 }
-                receiveAnswer();
-
+                Response response = receiveAnswer();
+                if (response == null) user = UserIdentify.getUser();
             }
 
         } catch (IOException e){
@@ -83,11 +96,13 @@ public class Client {
         }
     }
 
-    private static void send(Request request){
+    public static void send(Request request){
         try {
             byte[] requestBytes = Serializer.serialize(request);
             ByteBuffer buffer = ByteBuffer.wrap(requestBytes);
-            channel.send(buffer, address);                //TODO check channel for null
+            if (address == null)
+                address = new InetSocketAddress(LOCALHOST, port);
+            channel.send(buffer, address);
             buffer.clear();
         }
         catch (IOException e){
@@ -95,9 +110,8 @@ public class Client {
         }
     }
 
-    private static void receiveAnswer(){
+    public static Response receiveAnswer(){
         try {
-            boolean isReceived = false;
             ByteBuffer buffer = ByteBuffer.wrap(new byte[65000]);
 
             for (int i = 0; i < TIMEOUT; i++){
@@ -108,15 +122,12 @@ public class Client {
                     System.out.println(response.getServerAnswer());
                     buffer.clear();
 
-                    isReceived = true;
-                    break;
+                    return response;
                 }
-
-                Thread.sleep(1000);
+                Thread.sleep(100);
             }
 
-            if (!isReceived)
-                System.out.println("Время ожидания истекло. Ответ от сервера не был получен.");
+            System.out.println("Время ожидания истекло. Ответ от сервера не был получен.");
 
         } catch (IOException e){
             System.out.println("Ошибка приема сообщения: " + e.getMessage());
@@ -127,5 +138,6 @@ public class Client {
         } catch (InterruptedException e) {
             System.out.println("Ошибка ожидания ответа: " + e.getMessage());
         }
+        return null;
     }
 }

@@ -17,7 +17,9 @@ public enum CommandType {
     HISTORY("history"),
     AVERAGE_OF_STUDENTS_COUNT("average_of_students_count"),
     FILTER_STARTS_WITH_NAME("filter_starts_with_name"),
-    PRINT_DESCENDING("print_descending");
+    PRINT_DESCENDING("print_descending"),
+    REGISTER("registration"),
+    AUTH("authentication");
 
     private final String command;
     private static final Map<String, CommandType> LOOK_MAP = new HashMap<>();

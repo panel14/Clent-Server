@@ -5,22 +5,23 @@ import org.apache.commons.lang3.math.NumberUtils;
 import studyGroup.FormOfEducation;
 import studyGroup.Semester;
 import utils.Request;
+import utils.User;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class RequestManager {
 
     private final static Scanner in = new Scanner(System.in);
 
-    public static Request makeRequest(String[] command){
-        if (command.length == 1){
-
+    public static Request makeRequest(String[] command, User user) {
+        if (checkInput(command[0])){
             CommandType type = CommandType.getTypeByString(command[0]);
             if (type != null)
-                return new Request(type);
+                return new Request(type, user);
             return null;
 
-        } else {
+        } else if (command.length > 1) {
             if (command[1].equals(""))
                 return null;
             switch (command[0]){
@@ -29,22 +30,38 @@ public class RequestManager {
                         return null;
                     String[] params = getParams(command[2]);
                     params[7] = command[1];
-                    return new Request(CommandType.INSERT, params);
+                    return new Request(CommandType.INSERT, params, user);
                 }
                 case "update": {
                     if (command.length != 3 || !command[1].equals("id"))
                         return null;
                     String[] params = getParams(command[2]);
                     params[7] = command[2];
-                    return new Request(CommandType.UPDATE, params);
+                    return new Request(CommandType.UPDATE, params, user);
                 }
                 default:
                     CommandType type = CommandType.getTypeByString(command[0]);
-                    if (type != null)
-                        return new Request(type, new String[]{command[1]});
+                    if (type != null){
+                        String[] noFirst = Arrays.copyOfRange(command, 1, command.length);
+                        return new Request(type, noFirst, user);
+                    }
                     return null;
             }
         }
+        else return null;
+    }
+
+    private static boolean checkInput(String input) {
+        return (
+                input.equals("show")
+                || input.equals("info")
+                || input.equals("history")
+                || input.equals("clear")
+                || input.equals("exit")
+                || input.equals("help")
+                || input.equals("average_of_students_count")
+                || input.equals("print_descending")
+        );
     }
 
     private static String[] getParams(String groupName){

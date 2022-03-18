@@ -2,17 +2,20 @@ package command;
 
 import state.CollectionStorage;
 import studyGroup.*;
+import utils.User;
 
 public class Command {
 
     protected String[] args;
+    protected User user;
 
     public String[] getArgs() {
         return args;
     }
 
-    public void setArgs(String[] args) {
+    public void setArgs(String[] args, User user) {
         this.args = args;
+        this.user = user;
     }
 
     protected Person getAdmin(String admin){
@@ -57,7 +60,9 @@ public class Command {
 
         group.setStudentsCount(Long.parseLong(args[2]));
         group.setAverageMark(Integer.parseInt(args[3]));
-        group.setFormOfEducation(FormOfEducation.valueOf(args[4]));
+
+        FormOfEducation form = (args[4].equals("") ? null : FormOfEducation.valueOf(args[4]));
+        group.setFormOfEducation(form);
         group.setSemesterEnum(Semester.valueOf(args[5]));
 
         group.setGroupAdmin(getAdmin(args[6]));
@@ -66,7 +71,7 @@ public class Command {
     }
 
     protected boolean isNameExist(String name) {
-        return CollectionStorage.storage.getCollection().values()
+        return CollectionStorage.storage.getUserCollection(user).values()
                 .stream().noneMatch(s -> s.getName().equals(name));
     }
 

@@ -9,7 +9,7 @@ public class AverageOfCommand extends Command {
     @Override
     public String execute() {
 
-        Collection<StudyGroup> groups = CollectionStorage.storage.getCollection().values();
+        Collection<StudyGroup> groups = CollectionStorage.storage.getAllCollection().values();
         long sum = groups.stream()
                 .map(StudyGroup::getStudentsCount).reduce(Long::sum).get();
 

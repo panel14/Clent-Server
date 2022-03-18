@@ -14,6 +14,18 @@ public class Location {
         this.z = z;
     }
 
+    public double getX() {
+        return x;
+    }
+
+    public Integer getY() {
+        return y;
+    }
+
+    public double getZ() {
+        return z;
+    }
+
     private double x;
     private Integer y; //Поле не может быть null
     private double z;

@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class FileConverter {
 
-    public static HashMap<String, StudyGroup> getCollection(String path){
+    /*public static HashMap<String, StudyGroup> getCollection(String path){
         String file = readFile(path);
         String[] groups = file.trim().split("\n");
 
@@ -25,10 +25,8 @@ public class FileConverter {
             StudyGroup newGroup = convertToSG(props);
             collection.put(props[0], newGroup);
         }
-
-
         return collection;
-    }
+    }*/
 
     public static void saveCollection(HashMap<String, StudyGroup> collection, String path){
         StringBuilder fileString = new StringBuilder();

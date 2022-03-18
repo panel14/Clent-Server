@@ -9,6 +9,14 @@ public class Coordinates {
         this.y = (y > 693) ? 693 : y;
     }
 
+    public Integer getX() {
+        return x;
+    }
+
+    public Float getY() {
+        return y;
+    }
+
     private Integer x; //Поле не может быть null
     private Float y; //Максимальное значение поля: 693, Поле не может быть null
 

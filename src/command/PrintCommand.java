@@ -11,7 +11,7 @@ public class PrintCommand extends Command {
     @Override
     public String execute() {
 
-        HashMap<String, StudyGroup> groups = CollectionStorage.storage.getCollection();
+        HashMap<String, StudyGroup> groups = CollectionStorage.storage.getAllCollection();
 
         Optional<String> result = groups.entrySet().stream()
                 .sorted(Map.Entry.<String, StudyGroup>comparingByValue().reversed())
