@@ -12,7 +12,7 @@ public class RemoveLowerCommand extends Command {
     @Override
     public String execute() {
         if (isNameExist(args[0]))
-            return "Элемента с заданным именем нет в коллекции.";
+            return "Элемента с заданным именем нет в коллекции пользователя " + user.login;
 
         HashMap<String, StudyGroup> groups = CollectionStorage.storage.getUserCollection(user);
 
@@ -27,6 +27,6 @@ public class RemoveLowerCommand extends Command {
         HashMap<String, StudyGroup> subMap = CollectionStorage.storage.setSubMap(args[0], sortedGroups);
         CollectionStorage.storage.getAllCollection().keySet().removeAll(subMap.keySet());
 
-        return "Элементы, меньшие чем " + args[0] + " были удалены из коллекции.";
+        return "Элементы, меньшие чем " + args[0] + " были удалены из коллекции " + user.login;
     }
 }

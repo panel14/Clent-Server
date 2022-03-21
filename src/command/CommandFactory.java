@@ -8,7 +8,6 @@ public class CommandFactory {
     public static Command createCommand(CommandType type, String[] args, User user){
 
         Command command = null;
-
         switch (type) {
             case HELP:
                 command = new HelpCommand();
@@ -63,8 +62,10 @@ public class CommandFactory {
         }
         if (args != null) {
             assert command != null;
-            command.setArgs(args, user);
+            command.setArgs(args);
         }
+        assert command != null;
+        command.setUser(user);
         historyCommand.updateHistory(type.toString());
 
         return command;

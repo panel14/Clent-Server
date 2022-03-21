@@ -1,13 +1,11 @@
 package server.service;
 
-import javafx.util.Pair;
+import utils.Pair;
 import studyGroup.*;
 import utils.User;
 
 import java.sql.*;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,22 +39,21 @@ public class DataBase {
             "key)" +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    public static void connect(){
+    public static boolean connect(){
         try{
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(url, user, password);
             System.out.println("Подключение успешно установлено.");
-            isConnected = true;
+            return true;
         }
         catch (Exception e){
             System.out.println("Не удалось установить подключение: " + e.getMessage());
-            isConnected = false;
+            return false;
         }
     }
 
     public static boolean isUserExist(User user){
         try {
-            if (!isConnected) connect();
             PreparedStatement checkStatement = connection.prepareStatement(IS_EXIST_REQUEST);
             checkStatement.setString(1, user.login);
             ResultSet resultSet = checkStatement.executeQuery();
@@ -68,7 +65,8 @@ public class DataBase {
     }
 
     public static Pair<Boolean, String> registerUser(User user) {
-        if (!isConnected) connect();
+        isConnected = connect();
+        if (!isConnected) return new Pair<>(false, "Не удалось подключиться к базе данных.");
         if (isUserExist(user)) return new Pair<>(false, "Пользователь с таким логином уже существует.");
         try {
             String hashPassword = Hasher.encodeStringSHA512(user.password);
@@ -85,7 +83,8 @@ public class DataBase {
     }
 
     public static Pair<Boolean, String> isAuthUser(User user) {
-        if (!isConnected) connect();
+        isConnected = connect();
+        if (!isConnected) return new Pair<>(false, "Не удалось подключиться к базе данных.");
         if (!isUserExist(user)) return new Pair<>(false, "Пользователя с таким логином не существует.");
         try {
             String hashPassword = Hasher.encodeStringSHA512(user.password);
@@ -105,7 +104,6 @@ public class DataBase {
     }
 
     public static HashMap<String, StudyGroup> getCollection() {
-
         HashMap<String, StudyGroup> groups = new HashMap<>();
         try {
             ResultSet collection = connection.prepareStatement(GET_COLLECTION).executeQuery();

@@ -21,10 +21,11 @@ public class UpdateCommand extends Command {
 
         StudyGroup group = parseStudyGroup(args);
         group.setId(Integer.parseInt(args[7]));
+        group.setOwner(user.login);
         map.put(key, group);
 
         CollectionStorage.supplementAllCollection(map);
 
-        return "Элемент с id " + args[7] + "в коллекции " + user.login + " был обновлён";
+        return "Элемент с id " + args[7] + " в коллекции " + user.login + " был обновлён";
     }
 }

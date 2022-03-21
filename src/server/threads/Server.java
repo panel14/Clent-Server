@@ -13,27 +13,19 @@ import java.util.concurrent.TimeUnit;
 
 public class Server {
 
-private static int port;
+private static int PORT = 8090;
 private static DatagramSocket socket;
 private final static Scanner serviceIn = new Scanner(System.in);
-private static final String LOCALHOST = "localhost";
 
 private static final ExecutorService processing = Executors.newFixedThreadPool(8);
 private static final ExecutorService sending = Executors.newCachedThreadPool();
 
     public static void main(String[] args){
 
-
-/*        if (NumberUtils.isParsable(args[0]))
-            port = Integer.parseInt(args[0]);
-        else port = 8090;*/
-
-        port = 8090;
-
         try{
             configureServer();
         } catch (SocketException e) {
-            System.out.println("Порт " + port + " занят, сервер не может быть запущен.");
+            System.out.println("Порт " + PORT + " занят, сервер не может быть запущен.");
             return;
         }
 
@@ -47,7 +39,6 @@ private static final ExecutorService sending = Executors.newCachedThreadPool();
                 serviceLine = serviceIn.nextLine();
                     if (serviceLine.equals("exit")) {
                         DataBase.saveCollection(CollectionStorage.storage.getAllCollection());
-                        socket.close();
                         processing.shutdown();
                         sending.shutdown();
                         if (processing.awaitTermination(2, TimeUnit.SECONDS))
@@ -62,17 +53,17 @@ private static final ExecutorService sending = Executors.newCachedThreadPool();
                             sending.shutdownNow();
                             System.out.println("Поток отправки принудительно завершён");
                         }
+                        socket.close();
                         return;
                     }
                 }
-
                 socket.receive(data);
 
                 InetAddress address = data.getAddress();
-                port = data.getPort();
+                PORT = data.getPort();
 
-                ThreadInfo info = new ThreadInfo(socket, address, port);
-                Thread receptionThread = new Thread(new ReceptionThread(info, data, processing, sending));
+                ThreadInfo info = new ThreadInfo(socket, address, PORT);
+                Thread receptionThread = new Thread(new ReceptionThread(info, requestBytes, processing, sending));
                 receptionThread.start();
 
             } catch (IOException e){
@@ -85,7 +76,7 @@ private static final ExecutorService sending = Executors.newCachedThreadPool();
     }
 
     private static void configureServer() throws SocketException {
-        socket = new DatagramSocket(port);
-        System.out.println("Сервер запущен. Port: " + port);
+        socket = new DatagramSocket(PORT);
+        System.out.println("Сервер запущен. Port: " + PORT);
     }
 }

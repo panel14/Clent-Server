@@ -26,6 +26,8 @@ public class RequestManager {
                 return null;
             switch (command[0]){
                 case "insert": {
+                    System.out.println("Предупреждение: если введенный ключ совпадает с ключом элемента, который уже" +
+                            "есть в коллекции, старый элемент будет заменён на новый");
                     if (command.length != 3)
                         return null;
                     String[] params = getParams(command[2]);
@@ -116,6 +118,7 @@ public class RequestManager {
 
     private static boolean checkCoords(String coordinates){
         String[] splinted = coordinates.split(" ");
+        if (splinted.length < 2) return false;
         return NumberUtils.isParsable(splinted[0]) && NumberUtils.isParsable(splinted[1]);
     }
 

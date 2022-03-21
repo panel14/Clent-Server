@@ -12,7 +12,7 @@ public class RemoveGreaterCommand extends Command {
     @Override
     public String execute() {
         if (isNameExist(args[0]))
-            return "Элемента с заданным именем нет в коллекции.";
+            return "Элемента с заданным именем нет в коллекции пользователя " + user.login;
 
         HashMap<String, StudyGroup> groups = CollectionStorage.storage.getUserCollection(user);
 

@@ -13,8 +13,11 @@ public class Command {
         return args;
     }
 
-    public void setArgs(String[] args, User user) {
+    public void setArgs(String[] args) {
         this.args = args;
+    }
+
+    public void setUser(User user) {
         this.user = user;
     }
 

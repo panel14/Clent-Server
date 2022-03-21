@@ -10,17 +10,15 @@ import java.util.concurrent.ExecutorService;
 
 public class ReceptionThread implements Runnable {
 
-    private ThreadInfo info;
-    private DatagramPacket packet;
+    private final ThreadInfo info;
+    private final byte[] data;
 
-    private ExecutorService processing;
-    private ExecutorService sending;
+    private final ExecutorService processing;
+    private final ExecutorService sending;
 
-
-
-    public ReceptionThread(ThreadInfo info, DatagramPacket packet, ExecutorService processing, ExecutorService sending) {
+    public ReceptionThread(ThreadInfo info, byte[] data, ExecutorService processing, ExecutorService sending) {
         this.info = info;
-        this.packet = packet;
+        this.data = data;
         this.processing = processing;
         this.sending = sending;
     }
@@ -28,9 +26,9 @@ public class ReceptionThread implements Runnable {
     @Override
     public void run() {
         try {
-            Request request = (Request) Serializer.deserialize(packet.getData());
+            Request request = (Request) Serializer.deserialize(data);
             processing.execute(new ProcessingThread(info, sending, request));
-            System.out.println("NEW_THEAD_CHAIN\nПоток " + Thread.currentThread().getName() + ": получена команда " +
+            System.out.println("NEW_THREAD_CHAIN\nПоток " + Thread.currentThread().getName() + ": получена команда " +
                     request.getType());
 
         } catch (IOException | ClassNotFoundException e){

@@ -3,14 +3,13 @@ package server.threads;
 import command.Command;
 import command.CommandFactory;
 import command.CommandType;
-import javafx.util.Pair;
+import utils.Pair;
 import server.service.DataBase;
 import server.service.ThreadInfo;
 import utils.Request;
 import utils.Response;
 import utils.User;
 
-import java.util.Date;
 import java.util.concurrent.ExecutorService;
 
 public class ProcessingThread implements Runnable {
@@ -42,7 +41,8 @@ public class ProcessingThread implements Runnable {
             Pair<Boolean, String> isAuthUser = DataBase.isAuthUser(request.getUser());
             if (isAuthUser.getKey())
                 response = processRequest(request);
-            else response = new Response(request.getType(), "Запрещено выполнение команды неавторизованному" +
+            else response = new Response(request.getType(), "Запрещено выполнение команды " +
+                    "неавторизованному " +
                     "пользователю", false);
         }
 

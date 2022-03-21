@@ -47,13 +47,11 @@ public final class CollectionStorage {
     }
 
     public synchronized HashMap<String, StudyGroup> setSubMap(String subBorder, HashMap<String, StudyGroup> map) {
-        boolean isFounded = false;
         String[] keys = map.keySet().toArray(new String[0]);
+        boolean isFounded = false;
         for (String key : keys){
-            if (map.get(key).getName().equals(subBorder))
-                isFounded = true;
-            if (!isFounded)
-                map.remove(key);
+            if (map.get(key).getName().equals(subBorder)) isFounded = true;
+            if (isFounded) map.remove(key);
         }
         return map;
     }
