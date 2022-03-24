@@ -6,10 +6,17 @@ import utils.Response;
 import utils.User;
 
 import java.util.Scanner;
-
+/**
+ * Класс идентификации пользователя
+ * */
 public class UserIdentify {
     private static final Scanner in = new Scanner(System.in);
 
+    /**
+     * Метод для получения данных пользователя
+     * @return user - если пользователь подтверждён/зарегистрирован,
+     *         null - если пользователь не был подтверждён или регистрация завершилась неудачей
+     * */
     public static User getUser() {
         System.out.println("Чтобы пользоваться предложением, введите логин и пароль\n" +
                 "Если вы не зарегистрированы, введите \"reg\"\nЕсли вы являетесь зарегистрированным пользователем - " +

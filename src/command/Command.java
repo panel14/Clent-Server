@@ -3,7 +3,9 @@ package command;
 import state.CollectionStorage;
 import studyGroup.*;
 import utils.User;
-
+/**
+ * Общий класс команд приложения
+ * */
 public class Command {
 
     protected String[] args;
@@ -78,6 +80,10 @@ public class Command {
                 .stream().noneMatch(s -> s.getName().equals(name));
     }
 
+    /**
+     * Основной метод команд приложения. Запускает обработку команды
+     * @return string - результат выполнения команды.
+     * */
     public String execute(){
         return "Неизвестная команда";
     }

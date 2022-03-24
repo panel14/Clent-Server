@@ -1,5 +1,8 @@
 package utils;
 
+/**
+ * Класс пара
+ * */
 public class Pair<T, K> {
     private final T key;
     private final K value;

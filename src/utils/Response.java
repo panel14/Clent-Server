@@ -4,7 +4,10 @@ import command.CommandType;
 
 import java.io.Serializable;
 
-
+/**
+ * Класс хранит всю информацию об ответе сервера
+ * Используется для обмена данными между клиентом и сервером
+ * */
 public class Response implements Serializable {
 
     private static final long serialVersionUID = 40L;

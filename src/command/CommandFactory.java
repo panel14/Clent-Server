@@ -2,9 +2,19 @@ package command;
 
 import utils.User;
 
+/**
+ * Класс-фабрика для получения команд по запросу клиента для их выполнения
+ * */
 public class CommandFactory {
     static HistoryCommand historyCommand = new HistoryCommand();
 
+    /**
+     * Основной метод фабрики команд - создание новой команды по типу
+     * @param type - тип команды, элемент enum CommandType
+     * @param args - аргументы, полученные от пользователя
+     * @param user - данные пользователя
+     * @return Command - сформированная команда, с заданными параметрами
+     * */
     public static Command createCommand(CommandType type, String[] args, User user){
 
         Command command = null;

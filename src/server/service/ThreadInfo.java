@@ -2,7 +2,9 @@ package server.service;
 
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-
+/**
+ * Класс, хранит информацию для потока
+ * */
 public class ThreadInfo {
     public DatagramSocket socket;
     public InetAddress address;

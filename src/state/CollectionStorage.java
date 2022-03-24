@@ -10,6 +10,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Класс, предоставляет коллекцию и методы работы с ней
+ * */
 public final class CollectionStorage {
 
     public static CollectionStorage storage = new CollectionStorage();
@@ -21,12 +24,20 @@ public final class CollectionStorage {
         initDate = LocalDateTime.now();
     }
 
+    /**
+     * Метод, возвращает всю коллекцию
+     * @return HashMap - коллекция объектов
+     * */
     public synchronized HashMap<String, StudyGroup> getAllCollection() {
         if (collection.isEmpty())
             collection = DataBase.getCollection();
         return collection;
     }
 
+    /**
+     * Метод, дополняет коллекцию новыми элементами коллекции параметра
+     * @param all - дополнительные элементы для добавления в основную коллекцию
+     * */
     public static synchronized void supplementAllCollection(HashMap<String, StudyGroup> all) {
         collection.putAll(all);
     }
@@ -42,10 +53,18 @@ public final class CollectionStorage {
                 ));
     }
 
+    /**
+     * Метод, сохраняет коллекцию в базу данных
+     * */
     public static synchronized void saveCollection(){
         DataBase.saveCollection(collection);
     }
 
+    /**
+     * Метод, возвращает срез данной HashMap относительно граничного элемента subBorder
+     * @param subBorder - граничный элемент
+     * @param map - данная HashMap
+     * */
     public synchronized HashMap<String, StudyGroup> setSubMap(String subBorder, HashMap<String, StudyGroup> map) {
         String[] keys = map.keySet().toArray(new String[0]);
         boolean isFounded = false;
@@ -56,6 +75,9 @@ public final class CollectionStorage {
         return map;
     }
 
+    /**
+     * Метод, возвращает информацию о коллекции
+     * */
     public synchronized String getCollectionInfo(){
         return "Тип коллекции: " + HashMap.class + "\n"
                 +"Дата инициализации: " + initDate + "\n"

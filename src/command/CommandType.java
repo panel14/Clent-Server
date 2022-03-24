@@ -2,7 +2,9 @@ package command;
 
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * Класс перечисление типов команд
+ * */
 public enum CommandType {
     HELP("help"),
     SHOW("show"),

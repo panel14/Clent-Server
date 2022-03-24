@@ -1,5 +1,8 @@
 package studyGroup;
 
+/**
+ * Класс Coordinates, содержит 2 числовых значения для координат объекта
+ */
 public class Coordinates {
     public void setX(Integer x) {
         this.x = x;

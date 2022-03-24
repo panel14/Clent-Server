@@ -2,6 +2,9 @@ package studyGroup;
 
 import java.util.HashMap;
 
+/**
+ * Класс перечисление текущего семестра StudyGroup
+ */
 public enum Semester {
 
     FIRST("FIRST"),

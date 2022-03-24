@@ -42,8 +42,7 @@ public class ProcessingThread implements Runnable {
             if (isAuthUser.getKey())
                 response = processRequest(request);
             else response = new Response(request.getType(), "Запрещено выполнение команды " +
-                    "неавторизованному " +
-                    "пользователю", false);
+                    "неавторизованному пользователю", false);
         }
 
         sending.execute(new SendingThread(info, response));

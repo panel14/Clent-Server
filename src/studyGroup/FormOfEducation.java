@@ -2,6 +2,9 @@ package studyGroup;
 
 import java.util.HashMap;
 
+/**
+ * Класс перечисление формы обучения StudyGroup
+ */
 public enum FormOfEducation {
 
     DISTANCE_EDUCATION("DISTANCE_EDUCATION"),

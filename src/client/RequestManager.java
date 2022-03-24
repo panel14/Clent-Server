@@ -9,11 +9,19 @@ import utils.User;
 
 import java.util.Arrays;
 import java.util.Scanner;
-
+/**
+ * Класс, формирующий запросы пользователя
+ * */
 public class RequestManager {
 
     private final static Scanner in = new Scanner(System.in);
-
+    /**
+     * Метод, формирует запрос пользователя
+     * @param command - строковое полное представление команды
+     * @param user - данные пользователя
+     * @return Request - если удалось сформировать запрос
+     *         null - не удалось сформировать запрос из-за некорректности данных
+     * */
     public static Request makeRequest(String[] command, User user) {
         if (checkInput(command[0])){
             CommandType type = CommandType.getTypeByString(command[0]);

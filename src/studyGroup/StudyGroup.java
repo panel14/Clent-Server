@@ -2,6 +2,9 @@ package studyGroup;
 
 import java.time.LocalDateTime;
 
+/**
+ * Класс коллекции StudyGroup
+ */
 public class StudyGroup implements Comparable<StudyGroup> {
 
     private Integer id;                                      //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
@@ -23,6 +26,9 @@ public class StudyGroup implements Comparable<StudyGroup> {
         this.owner = owner;
     }
 
+    /**
+     * Конструктор класса без аргументов. Аргументы, значения которых не могут быть null генерируются автоматически
+     */
     public StudyGroup(){
         this.name = "Bob";
         this.creationDate = LocalDateTime.now().withNano(0);

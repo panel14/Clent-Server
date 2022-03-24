@@ -8,7 +8,9 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * Класс для работы с базой данных
+ * */
 public class DataBase {
     private static final String url = "jdbc:postgresql://localhost:9999/studs";
     private static final String user = "s312434";
@@ -39,6 +41,11 @@ public class DataBase {
             "key)" +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+    /**
+     * Метод, устанавливает соединение с базой данных
+     * @return true - соединение установлено
+     *         false - не удалось установить соединение
+     * */
     public static boolean connect(){
         try{
             Class.forName("org.postgresql.Driver");
@@ -52,6 +59,12 @@ public class DataBase {
         }
     }
 
+    /**
+     * Метод, проверяет, существует ли пользователь в базе данных
+     * @param user - данные пользователя
+     * @return true - пользователь существует
+     *         false - пользователя нет в базе данных
+     * */
     public static boolean isUserExist(User user){
         try {
             PreparedStatement checkStatement = connection.prepareStatement(IS_EXIST_REQUEST);
@@ -64,6 +77,12 @@ public class DataBase {
         }
     }
 
+    /**
+     * Метод, добавляет нового пользователя в базу данных
+     * @param user - данные пользователя
+     * @return Возвращаемое значение - объект {@code Pair<Boolean, String>}. Значение bool - удалось
+     * зарегистрировать пользователя или нет, String - комментарий результата выполнения
+     * */
     public static Pair<Boolean, String> registerUser(User user) {
         isConnected = connect();
         if (!isConnected) return new Pair<>(false, "Не удалось подключиться к базе данных.");
@@ -82,6 +101,12 @@ public class DataBase {
         }
     }
 
+    /**
+     * Метод, проверяет, зарегистрирован ли пользователь
+     * @param user - данные пользователя
+     * @return Возвращаемое значение - объект {@code Pair<Boolean, String>}. Значение bool - зарегистрирован
+     * ли пользователь, String - комментарий результата выполнения
+     * */
     public static Pair<Boolean, String> isAuthUser(User user) {
         isConnected = connect();
         if (!isConnected) return new Pair<>(false, "Не удалось подключиться к базе данных.");
@@ -103,6 +128,10 @@ public class DataBase {
         }
     }
 
+    /**
+     * Метод, получает всю коллекцию из базы данных
+     * @return HashMap - все группы, содержащиеся в базе данных, обёрнутых в HashMap
+     * */
     public static HashMap<String, StudyGroup> getCollection() {
         HashMap<String, StudyGroup> groups = new HashMap<>();
         try {
@@ -148,6 +177,10 @@ public class DataBase {
         return groups;
     }
 
+    /**
+     * Метод, сохраняет коллекцию в базу данных
+     * @param groups - коллекция объектов
+     * */
     public static void saveCollection(HashMap<String, StudyGroup> groups){
         try {
             connection.createStatement().executeUpdate("TRUNCATE app_groups");
@@ -161,6 +194,11 @@ public class DataBase {
         }
     }
 
+    /**
+     * Метод, сохраняет коллекцию в базу данных
+     * @param group - объект StudyGroup
+     * @param key - ключ, с которым объект group будет добавлен в коллекцию
+     * */
     public static void saveGroup(StudyGroup group, String key) {
         try {
             PreparedStatement addState = connection.prepareStatement(SET_COLLECTION);

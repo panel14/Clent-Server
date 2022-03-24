@@ -1,5 +1,7 @@
 package studyGroup;
-
+/**
+ * Класс Person для админа StudyGroup
+ */
 public class Person {
 
     public String getName() {

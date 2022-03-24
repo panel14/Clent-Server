@@ -3,7 +3,10 @@ package utils;
 import command.CommandType;
 
 import java.io.Serializable;
-
+/**
+ * Класс хранит всю информацию о запросе клиента.
+ * Используется для обмена данными между клиентом и сервером
+ * */
 public class Request implements Serializable {
 
     private static final long serialVersionUID = 30L;
