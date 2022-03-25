@@ -14,7 +14,7 @@ import java.util.Map;
 public class DataBase {
     private static final String url = "jdbc:postgresql://localhost:9999/studs";
     private static final String user = "s312434";
-    private static final String password = "klk654";
+    private static final String password = "***";
     private static Connection connection;
 
     private static boolean isConnected = false;
